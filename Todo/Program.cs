@@ -1,4 +1,12 @@
+using Serilog;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/logs-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,5 +31,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+// app.MapGet("/", () => "Hello World!");
 
 app.Run();
